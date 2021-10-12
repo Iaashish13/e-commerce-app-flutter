@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "361259430880",
+    "project_id": "pizmo-eae2c",
+    "storage_bucket": "pizmo-eae2c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:361259430880:android:2c4db0c5e21996dc35b185",
+        "android_client_info": {
+          "package_name": "com.samaysolutions.pizmo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "361259430880-i54kojmbrgnqchsdub618mlkcnn05j9n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDslFR-UE6eJC6JEQlNPL0F970iIHPnq2w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "361259430880-i54kojmbrgnqchsdub618mlkcnn05j9n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
