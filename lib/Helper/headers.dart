@@ -30,7 +30,7 @@ class Headers extends ChangeNotifier {
             //   return Text(finalAddress);
             // }),
             Text(
-              (Provider.of<GetLocation>(context, listen: false).finalAddress),
+              (Provider.of<GetLocation>(context, listen: true).finalAddress),
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 18,

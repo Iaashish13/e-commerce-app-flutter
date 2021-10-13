@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
-String finalAddress = 'Searching Address';
+String? finalAddress = 'Searching Address';
 
 class GetLocation extends ChangeNotifier {
   String _finalAddress = 'Searching Address';
@@ -33,7 +33,7 @@ class GetLocation extends ChangeNotifier {
     print(placemarks[0].street);
     // ignore: avoid_print
     print(placemarks[0].name);
-    var address = placemarks[0].street;
+    var address = placemarks[0].street!;
     _finalAddress = address.toString();
 
     notifyListeners();

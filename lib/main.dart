@@ -4,6 +4,7 @@ import 'package:pizmo/Helper/fab.dart';
 import 'package:pizmo/Helper/headers.dart';
 import 'package:pizmo/Helper/middle_helper.dart';
 import 'package:pizmo/Screens/splash_screen.dart';
+import 'package:pizmo/Services/authentication.dart';
 import 'package:pizmo/Services/data.dart';
 import 'package:pizmo/Services/get_location.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +27,8 @@ void main() async {
       Provider<FAB>(
         create: (_) => FAB(),
       ),
-      Provider<GetLocation>(create: (_)=>GetLocation(),)
+      Provider<GetLocation>(create: (_)=>GetLocation(),),
+      Provider<Authentication>(create: (_)=>Authentication(),),
     ], child: const MyApp()),
   );
 }
