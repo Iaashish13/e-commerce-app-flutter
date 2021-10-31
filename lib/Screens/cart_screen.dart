@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pizmo/Helper/constants.dart';
 import 'package:pizmo/Screens/login_screen.dart';
+import 'package:pizmo/Screens/map_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -27,7 +29,6 @@ class _CartScreenState extends State<CartScreen> {
               cartData(context),
               shippingDetails(),
               billingData(),
-             
             ],
           ),
         ),
@@ -83,10 +84,36 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Widget cartData(BuildContext context) {
-    return  SizedBox(
-      // height: 300,
-     height: MediaQuery.of(context).size.height/2.2,
-     
+    return SizedBox(
+      height: MediaQuery.of(context).size.height / 2.2,
+      child: StreamBuilder<QuerySnapshot?>(
+        stream: FirebaseFirestore.instance.collection('myOrders').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return const CircularProgressIndicator();
+          } else {
+            return ListView(
+              children:
+                  snapshot.data.docs.map<Widget>((DocumentSnapshot documentSnapshot) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        child: Image.network(
+                          documentSnapshot['image'],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            );
+          }
+        },
+      ),   
     );
   }
 
@@ -126,7 +153,9 @@ class _CartScreenState extends State<CartScreen> {
             style: const TextStyle(color: Colors.black, fontSize: 20),
           ),
           const Spacer(),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.edit)),
+          IconButton(onPressed: () {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const MapScreen()));
+          }, icon: const Icon(Icons.edit)),
         ],
       ),
     );
@@ -252,7 +281,8 @@ class _CartScreenState extends State<CartScreen> {
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>const  LoginScreen()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()));
             },
             child: Container(
               width: MediaQuery.of(context).size.width / 2,

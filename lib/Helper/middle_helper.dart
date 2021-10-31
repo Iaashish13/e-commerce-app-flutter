@@ -110,7 +110,7 @@ class MiddleHelper extends ChangeNotifier {
                                           fontSize: 19,
                                           fontWeight: FontWeight.w500),
                                     ),
-                                    const Icon(Icons.favorite_outline)
+                                    const Icon(Icons.favorite_outline),
                                   ]),
                               const SizedBox(
                                 height: 8.0,

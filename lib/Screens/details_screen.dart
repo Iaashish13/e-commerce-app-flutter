@@ -1,8 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pizmo/Helper/constants.dart';
+import 'package:pizmo/Providers/calculations.dart';
 import 'package:pizmo/Screens/cart_screen.dart';
+import 'package:pizmo/Screens/login_screen.dart';
+import 'package:pizmo/Services/authentication.dart';
+import 'package:provider/provider.dart';
 
 class DetailsScreen extends StatefulWidget {
   final QueryDocumentSnapshot queryDocumentSnapshot;
@@ -14,13 +19,8 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  final int _cheeseValue = 0;
-  final int _baconValue = 0;
-  final int _onionsValue = 0;
   final int _totalItems = 0;
-  final int _noOfPlates = 0;
-  final int _chillyChutney = 0;
-  final int _specialChutney = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +48,22 @@ class _DetailsScreenState extends State<DetailsScreen> {
               Navigator.pop(context);
             },
             icon: const Icon(Icons.arrow_back_ios_new)),
+        const Spacer(),
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: TextButton(
+            onPressed: () {
+              context.read<Calculations>().resetData();
+            },
+            child: const Text(
+              'Reset',
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+            ),
+            style: TextButton.styleFrom(
+              primary: kActiveColor,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -168,9 +184,39 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
                 ),
               ),
-              addingItems('No. of Plates', '$_noOfPlates'),
-              addingItems('Special Chutney', '$_specialChutney'),
-              addingItems('Chilly Chutney', '$_chillyChutney'),
+              addingItems(
+                  'No. of Plates',
+                  '${Provider.of<Calculations>(context, listen: true).getNoOfPlates}'
+                      .toString(), () {
+                Provider.of<Calculations>(context, listen: false)
+                    .minusnoOfPlates();
+              }, () {
+                Provider.of<Calculations>(context, listen: false)
+                    .addnoOfPlates();
+              }),
+              addingItems(
+                  'Special Chutney',
+                  '${Provider.of<Calculations>(context, listen: true).getNoOfSpecialChutney}'
+                      .toString(), () {
+                Provider.of<Calculations>(context, listen: false)
+                    .minusSpecialChutney();
+              }, () {
+                Provider.of<Calculations>(context, listen: false)
+                    .addChilyChutney();
+              }),
+              addingItems(
+                'Chilly Chutney',
+                '${Provider.of<Calculations>(context, listen: true).getNoOfPiroChutney}'
+                    .toString(),
+                () {
+                  Provider.of<Calculations>(context, listen: false)
+                      .minusChilyChutney();
+                },
+                () {
+                  Provider.of<Calculations>(context, listen: false)
+                      .addChilyChutney();
+                },
+              ),
             ],
           ),
         ),
@@ -202,24 +248,82 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       ),
                     ),
                   ),
-                  addingItems('Cheese', '$_cheeseValue'),
-                  addingItems('Bacon', '$_baconValue'),
-                  addingItems('Onions', '$_onionsValue'),
+                  addingItems(
+                      'Cheese',
+                      '${context.watch<Calculations>().getCheeseValue}'
+                          .toString(), () {
+                    context.read<Calculations>().minusCheeseValue();
+                  }, () {
+                    context.read<Calculations>().addCheeseValue();
+                  }),
+                  addingItems(
+                    'Beacon',
+                    '${Provider.of<Calculations>(context, listen: true).getbeaconValue}'
+                        .toString(),
+                    () {
+                      Provider.of<Calculations>(context, listen: false)
+                          .minusBeaconValue();
+                    },
+                    () {
+                      Provider.of<Calculations>(context, listen: false)
+                          .addBeaconValue();
+                    },
+                  ),
+                  addingItems(
+                    'Onions',
+                    '${Provider.of<Calculations>(context, listen: true).getonionsValue}'
+                        .toString(),
+                    () {
+                      Provider.of<Calculations>(context, listen: false)
+                          .minusOnionsValue();
+                    },
+                    () {
+                      Provider.of<Calculations>(context, listen: false)
+                          .addOnionsValue();
+                    },
+                  ),
                 ],
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                sizeButton('S'),
+                sizeButton(
+                  context,
+                  'S',
+                  () {
+                    context.read<Calculations>().selectSmallSize();
+                  },
+                  context.watch<Calculations>().smallSelected
+                      ? kActiveColor
+                      : kInActiveColor,
+                ),
                 const SizedBox(
                   width: 24.0,
                 ),
-                sizeButton('M'),
+                sizeButton(
+                  context,
+                  'M',
+                  () {
+                    context.read<Calculations>().selectMediumSize();
+                  },
+                  context.watch<Calculations>().mediumSelected
+                      ? kActiveColor
+                      : kInActiveColor,
+                ),
                 const SizedBox(
                   width: 24.0,
                 ),
-                sizeButton('L'),
+                sizeButton(
+                  context,
+                  'L',
+                  () {
+                    context.read<Calculations>().selectLargeSize();
+                  },
+                  context.watch<Calculations>().largeSelected
+                      ? kActiveColor
+                      : kInActiveColor,
+                ),
               ],
             )
           ],
@@ -231,6 +335,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Widget addingItems(
     String name,
     String value,
+    VoidCallback onRemovePressed,
+    VoidCallback onAddPressed,
   ) {
     return Padding(
       padding: const EdgeInsets.only(
@@ -251,7 +357,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           Row(
             children: <Widget>[
               IconButton(
-                  onPressed: () {},
+                  onPressed: onRemovePressed,
                   icon: const Icon(
                     Icons.remove,
                     size: 22,
@@ -267,7 +373,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 width: 2.0,
               ),
               IconButton(
-                  onPressed: () {},
+                  onPressed: onAddPressed,
                   icon: const Icon(
                     Icons.add,
                     size: 22,
@@ -287,11 +393,30 @@ class _DetailsScreenState extends State<DetailsScreen> {
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
             onTap: () {
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.leftToRight,
-                      child: const CartScreen()));
+              context.read<Authentication>().authState;
+              final firebaseUser = context.read<User?>();
+              if (firebaseUser != null) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CartScreen()));
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()));
+              }
+
+              // context.read<Calculations>().addtoCart(context, {
+              //   'image': widget.queryDocumentSnapshot['image'],
+              //   'name': widget.queryDocumentSnapshot['Name'],
+              //   'price': widget.queryDocumentSnapshot['price'],
+              //   'onion': context.read<Calculations>().getonionsValue,
+              //   'beacon': context.read<Calculations>().getbeaconValue,
+              //   'cheese': context.read<Calculations>().getCheeseValue,
+              //   'size': context.read<Calculations>().getSize,
+
+              // });
             },
             child: Container(
               width: MediaQuery.of(context).size.width / 2,
@@ -316,16 +441,25 @@ class _DetailsScreenState extends State<DetailsScreen> {
         ),
         Stack(
           children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-              child: const Icon(
-                Icons.shopping_basket,
-                size: 30,
-                color: Colors.black,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.leftToRight,
+                        child: const CartScreen()));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                child: const Icon(
+                  Icons.shopping_basket,
+                  size: 30,
+                  color: Colors.black,
+                ),
               ),
             ),
             Positioned(
@@ -345,16 +479,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 
-  Widget sizeButton(String size) {
+  Widget sizeButton(
+      BuildContext context, String size, VoidCallback onPressed, Color color) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: GestureDetector(
-        onTap: () {},
+        onTap: onPressed,
         child: Container(
             width: 30,
-            decoration: const BoxDecoration(
-                color: kActiveColor,
-                borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            decoration: BoxDecoration(
+                // color: kActiveColor,
+                color: color,
+                borderRadius: const BorderRadius.all(Radius.circular(8.0))),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -362,7 +498,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
               ),
             )),

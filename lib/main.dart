@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pizmo/Helper/fab.dart';
 import 'package:pizmo/Helper/headers.dart';
 import 'package:pizmo/Helper/middle_helper.dart';
+import 'package:pizmo/Providers/calculations.dart';
 import 'package:pizmo/Screens/splash_screen.dart';
 import 'package:pizmo/Services/authentication.dart';
 import 'package:pizmo/Services/data.dart';
@@ -10,25 +11,32 @@ import 'package:pizmo/Services/get_location.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  Provider.debugCheckInvalidValueType = null;
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(
     MultiProvider(providers: [
-      Provider<Headers>(
+      ChangeNotifierProvider(
         create: (_) => Headers(),
       ),
-      Provider<MiddleHelper>(
+      ChangeNotifierProvider(
         create: (_) => MiddleHelper(),
       ),
-      Provider<ManagingData>(
+      ChangeNotifierProvider(
         create: (_) => ManagingData(),
       ),
-      Provider<FAB>(
+      ChangeNotifierProvider(
         create: (_) => FAB(),
       ),
-      Provider<GetLocation>(create: (_)=>GetLocation(),),
-      Provider<Authentication>(create: (_)=>Authentication(),),
+      ChangeNotifierProvider(
+        create: (_) => GetLocation(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => Authentication(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => Calculations(),
+      ),
+   
     ], child: const MyApp()),
   );
 }

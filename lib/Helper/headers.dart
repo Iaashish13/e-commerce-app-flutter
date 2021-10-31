@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pizmo/Helper/constants.dart';
 import 'package:pizmo/Services/get_location.dart';
 import 'package:provider/provider.dart';
 
@@ -26,9 +27,7 @@ class Headers extends ChangeNotifier {
                 size: 21,
               ),
             ),
-            // Consumer<GetLocation>(builder: (BuildContext context,value, Widget? child){
-            //   return Text(finalAddress);
-            // }),
+           
             Text(
               (Provider.of<GetLocation>(context, listen: true).finalAddress),
               style: const TextStyle(
@@ -40,12 +39,13 @@ class Headers extends ChangeNotifier {
           ],
         ),
         IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.search_outlined,
-              size: 28,
-              color: Colors.black,
-            )),
+          onPressed: () {},
+          icon: const Icon(
+            Icons.search_outlined,
+            size: 28,
+            color: Colors.black,
+          ),
+        ),
       ],
     );
   }
@@ -101,7 +101,7 @@ class Headers extends ChangeNotifier {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
           decoration: const BoxDecoration(
-              color: Color(0xFFF2f1f2),
+              color: kInActiveColor,
               borderRadius: BorderRadius.all(Radius.circular(16.0))),
           child: Text(
             name,

@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Radius.circular(
                       24,
                     ),
-                  )),
+                  ),),
                 ),
               ),
               const SizedBox(
@@ -109,13 +109,14 @@ class _LoginScreenState extends State<LoginScreen> {
     return Row(
       children: <Widget>[
         IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back_ios_new,
-              color: Colors.black,
-            )),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.black,
+          ),
+        ),
       ],
     );
   }
