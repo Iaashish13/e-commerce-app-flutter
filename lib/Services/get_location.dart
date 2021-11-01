@@ -58,23 +58,22 @@ class GetLocation with ChangeNotifier {
     markers[markerId] = marker;
   }
 
- fetchMaps() async {
-     // ignore: void_checks
-     getCurrentLocation().whenComplete((){
+  fetchMaps() {
     return GoogleMap(
       myLocationEnabled: true,
       mapType: MapType.hybrid,
       onTap: (loc) async {
         List<Placemark> placemarks =
             await placemarkFromCoordinates(loc.latitude, loc.longitude);
-        _mainAdress = placemarks[0].subAdministrativeArea.toString();
-        _countryName = placemarks[0].street.toString();
+        _mainAdress = placemarks[0].subAdministrativeArea!.toString();
+        _countryName = placemarks[0].street!.toString();
         notifyListeners();
         markers.isEmpty
             ? getMarkers(loc.latitude, loc.longitude)
             : markers.clear();
         // ignore: avoid_print
         print(loc);
+        print(_mainAdress);
       },
       markers: Set<Marker>.of(markers.values),
       onMapCreated: (GoogleMapController mapController) {
@@ -89,6 +88,5 @@ class GetLocation with ChangeNotifier {
         zoom: 18,
       ),
     );
-    });
   }
 }
