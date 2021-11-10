@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:pizmo/Helper/constants.dart';
 import 'package:pizmo/Screens/login_screen.dart';
 import 'package:pizmo/Screens/map_screen.dart';
+import 'package:pizmo/Services/get_location.dart';
+import 'package:provider/provider.dart';
+
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -93,8 +96,8 @@ class _CartScreenState extends State<CartScreen> {
             return const CircularProgressIndicator();
           } else {
             return ListView(
-              children:
-                  snapshot.data.docs.map<Widget>((DocumentSnapshot documentSnapshot) {
+              children: snapshot.data.docs
+                  .map<Widget>((DocumentSnapshot documentSnapshot) {
                 return Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -113,7 +116,7 @@ class _CartScreenState extends State<CartScreen> {
             );
           }
         },
-      ),   
+      ),
     );
   }
 
@@ -127,7 +130,8 @@ class _CartScreenState extends State<CartScreen> {
             borderRadius: BorderRadius.all(Radius.circular(24))),
         child: Column(
           children: <Widget>[
-            shippingData(context, const Icon(Icons.location_on), 'Parshyang'),
+            shippingData(context, const Icon(Icons.location_on),
+                context.watch<GetLocation>().mainAdress),
             shippingData(
                 context, const Icon(Icons.schedule_outlined), '30-35 mins'),
           ],
@@ -153,9 +157,12 @@ class _CartScreenState extends State<CartScreen> {
             style: const TextStyle(color: Colors.black, fontSize: 20),
           ),
           const Spacer(),
-          IconButton(onPressed: () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const MapScreen()));
-          }, icon: const Icon(Icons.edit)),
+          IconButton(
+              onPressed: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const MapScreen()));
+              },
+              icon: const Icon(Icons.edit)),
         ],
       ),
     );

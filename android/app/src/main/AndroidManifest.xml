@@ -7,7 +7,7 @@
         android:label="pizmo"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="apikey"/>
+               android:value="AIzaSyDslFR-UE6eJC6JEQlNPL0F970iIHPnq2w"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

@@ -15,7 +15,7 @@ class Calculations with ChangeNotifier {
 
   bool isSelected = false,
       smallSelected = false,
-      mediumSelected = false,
+      mediumSelected = true,
       largeSelected = false,
       selected = false;
   String size ='';
@@ -136,6 +136,7 @@ class Calculations with ChangeNotifier {
      
       await Provider.of<ManagingData>(context, listen: false)
           .submitData(context, data);
+          notifyListeners();
     } else {
       return showModalBottomSheet(
           context: context,

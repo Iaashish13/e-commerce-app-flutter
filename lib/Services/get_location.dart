@@ -3,13 +3,13 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-String? finalAddress = 'Searching Address';
+// String? finalAddress = 'Searching Address';
 
 class GetLocation with ChangeNotifier {
-  String _finalAddress = 'Searching Address';
-  String? _countryName, _mainAdress;
-  String get finalAddress => _finalAddress;
-  String get countryName => _countryName!;
+  String? _finalAddress = 'Searching Address';
+ String?  _mainAdress = 'Fetching location';
+  String get finalAddress => _finalAddress!;
+  // String get countryName => _countryName;
   String get mainAdress => _mainAdress!;
 
   GoogleMapController? googleMapController;
@@ -65,16 +65,15 @@ class GetLocation with ChangeNotifier {
       onTap: (loc) async {
         List<Placemark> placemarks =
             await placemarkFromCoordinates(loc.latitude, loc.longitude);
-        _mainAdress = placemarks[0].subAdministrativeArea!.toString();
-        _countryName = placemarks[0].street!.toString();
+        _mainAdress = placemarks[0].street!;
+        // _countryName = placemarks[0].subLocality!.toString();
         notifyListeners();
-        markers.isEmpty
-            ? getMarkers(loc.latitude, loc.longitude)
-            : markers.clear();
+       getMarkers(loc.latitude, loc.longitude); 
         // ignore: avoid_print
         print(loc);
+        // ignore: avoid_print
         print(_mainAdress);
-      },
+      }, 
       markers: Set<Marker>.of(markers.values),
       onMapCreated: (GoogleMapController mapController) {
         googleMapController = mapController;
@@ -87,6 +86,6 @@ class GetLocation with ChangeNotifier {
         ),
         zoom: 18,
       ),
-    );
+    ); 
   }
 }

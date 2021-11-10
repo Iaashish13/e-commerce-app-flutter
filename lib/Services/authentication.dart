@@ -1,18 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Authentication with ChangeNotifier {
  
   String? uid;
-  String get getuid => uid!;
+  String? get getuid => uid;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   Stream<User?> get authState => firebaseAuth.authStateChanges();
   Future loginIntoAccount(String email, String password) async {
     try {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+     
       UserCredential userCredential = await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
       User? user = userCredential.user!;
       uid = user.uid;
+       sharedPreferences.setString('uid', uid!);
       // ignore: avoid_print
       print('Uid = $getuid');
     } on FirebaseAuthException catch (e) {
@@ -29,10 +33,12 @@ class Authentication with ChangeNotifier {
 
   Future signUpAccount(String email, String password) async {
     try {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       UserCredential userCredential = await firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
       User? user = userCredential.user!;
       uid = user.uid;
+      sharedPreferences.setString('uid', uid!);
       // ignore: avoid_print
       print('Uid = $getuid');
     } on FirebaseAuthException catch (e) {

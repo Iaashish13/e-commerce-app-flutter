@@ -5,9 +5,13 @@ import 'package:page_transition/page_transition.dart';
 import 'package:pizmo/Helper/constants.dart';
 import 'package:pizmo/Providers/calculations.dart';
 import 'package:pizmo/Screens/cart_screen.dart';
+import 'package:pizmo/Screens/home_screen.dart';
 import 'package:pizmo/Screens/login_screen.dart';
 import 'package:pizmo/Services/authentication.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+String? userUid;
 
 class DetailsScreen extends StatefulWidget {
   final QueryDocumentSnapshot queryDocumentSnapshot;
@@ -20,6 +24,16 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   final int _totalItems = 0;
+  Future getUid() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    userUid = sharedPreferences.getString('uid');
+  }
+
+  @override
+  void initState() {
+    getUid();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -393,30 +407,46 @@ class _DetailsScreenState extends State<DetailsScreen> {
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
             onTap: () {
-              context.read<Authentication>().authState;
-              final firebaseUser = context.read<User?>();
-              if (firebaseUser != null) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CartScreen()));
-              } else {
+              if (userUid == null) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const LoginScreen()));
+              } else {
+                  addedToCart(context);
+                context.read<Calculations>().addtoCart(context, {
+                  'image': widget.queryDocumentSnapshot['image'],
+                  'name': widget.queryDocumentSnapshot['Name'],
+                  'price': widget.queryDocumentSnapshot['price'],
+                  'onion': context.read<Calculations>().getonionsValue,
+                  'beacon': context.read<Calculations>().getbeaconValue,
+                  'cheese': context.read<Calculations>().getCheeseValue,
+                  'size': context.read<Calculations>().getSize,
+                });
+              
               }
 
-              // context.read<Calculations>().addtoCart(context, {
-              //   'image': widget.queryDocumentSnapshot['image'],
-              //   'name': widget.queryDocumentSnapshot['Name'],
-              //   'price': widget.queryDocumentSnapshot['price'],
-              //   'onion': context.read<Calculations>().getonionsValue,
-              //   'beacon': context.read<Calculations>().getbeaconValue,
-              //   'cheese': context.read<Calculations>().getCheeseValue,
-              //   'size': context.read<Calculations>().getSize,
-
+              // getUid().whenComplete(() {
+              //   Navigator.pushReplacement(
+              //       context,
+              //       MaterialPageRoute(
+              //           builder: (context) => userUid == null
+              //               ? const LoginScreen()
+              //               : const HomeScreen()));
               // });
+              // context.read<Authentication>().authState;
+              // final firebaseUser = context.read<User?>();
+              // if (firebaseUser != null) {
+              //   Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //           builder: (context) => const CartScreen()));
+              // } else {
+              //   Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //           builder: (context) => const LoginScreen()));
+              // }
             },
             child: Container(
               width: MediaQuery.of(context).size.width / 2,
@@ -504,5 +534,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
             )),
       ),
     );
+  }
+
+  addedToCart(BuildContext context) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return const SizedBox(
+            height: 50,
+            child: Center(
+              child: Text(
+                'Added to Cart Sucessfully',
+              ),
+            ),
+          );
+        });
   }
 }
