@@ -62,17 +62,22 @@ class GetLocation with ChangeNotifier {
     return GoogleMap(
       myLocationEnabled: true,
       mapType: MapType.hybrid,
+      mapToolbarEnabled: true,
+      
       onTap: (loc) async {
         List<Placemark> placemarks =
             await placemarkFromCoordinates(loc.latitude, loc.longitude);
         _mainAdress = placemarks[0].street!;
         // _countryName = placemarks[0].subLocality!.toString();
         notifyListeners();
-       getMarkers(loc.latitude, loc.longitude); 
+        
+      // ignore: unnecessary_null_comparison
+      markers == null ? getMarkers(loc.latitude, loc.longitude):markers.clear(); 
         // ignore: avoid_print
         print(loc);
         // ignore: avoid_print
         print(_mainAdress);
+        
       }, 
       markers: Set<Marker>.of(markers.values),
       onMapCreated: (GoogleMapController mapController) {

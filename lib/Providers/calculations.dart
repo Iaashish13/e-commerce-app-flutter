@@ -15,7 +15,7 @@ class Calculations with ChangeNotifier {
 
   bool isSelected = false,
       smallSelected = false,
-      mediumSelected = true,
+      mediumSelected = false,
       largeSelected = false,
       selected = false;
   String size ='';
@@ -128,14 +128,14 @@ class Calculations with ChangeNotifier {
 
   }
 
-  addtoCart(BuildContext context, dynamic data) async {
+  addtoCart(BuildContext context, dynamic data,String name) async {
     if (smallSelected != false ||
         mediumSelected != false ||
         largeSelected != false) {
       cartData++;
      
       await Provider.of<ManagingData>(context, listen: false)
-          .submitData(context, data);
+          .submitData(context, data,name);
           notifyListeners();
     } else {
       return showModalBottomSheet(

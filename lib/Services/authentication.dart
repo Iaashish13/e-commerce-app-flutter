@@ -4,8 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Authentication with ChangeNotifier {
  
-  String? uid;
-  String? get getuid => uid;
+ String? _userId ;
+  String get getuid => _userId!;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   Stream<User?> get authState => firebaseAuth.authStateChanges();
   Future loginIntoAccount(String email, String password) async {
@@ -15,8 +15,8 @@ class Authentication with ChangeNotifier {
       UserCredential userCredential = await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
       User? user = userCredential.user!;
-      uid = user.uid;
-       sharedPreferences.setString('uid', uid!);
+      _userId = user.uid;
+       sharedPreferences.setString('uid', _userId!);
       // ignore: avoid_print
       print('Uid = $getuid');
     } on FirebaseAuthException catch (e) {
@@ -37,8 +37,8 @@ class Authentication with ChangeNotifier {
       UserCredential userCredential = await firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
       User? user = userCredential.user!;
-      uid = user.uid;
-      sharedPreferences.setString('uid', uid!);
+      _userId = user.uid;
+      sharedPreferences.setString('uid', _userId!);
       // ignore: avoid_print
       print('Uid = $getuid');
     } on FirebaseAuthException catch (e) {

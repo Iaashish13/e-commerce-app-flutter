@@ -30,7 +30,7 @@ class _MapScreenState extends State<MapScreen> {
                 icon: const Icon(
                   Icons.arrow_back_ios,
                 ),
-                color: Colors.black,
+                color: Colors.white,
               ),
             )
           ],

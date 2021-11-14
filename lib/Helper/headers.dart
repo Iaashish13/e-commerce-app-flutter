@@ -1,22 +1,66 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pizmo/Helper/constants.dart';
+
+import 'package:pizmo/Screens/home_screen.dart';
+
 import 'package:pizmo/Services/get_location.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Headers extends ChangeNotifier {
   Widget appBar(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
+        // userUid == null?
+        // IconButton(
+        //         onPressed: () {},
+        //         icon: const Icon(
+        //           Icons.face,
+        //           size: 28,
+        //           color: Colors.black,
+        //         ),
+        //       ):
         IconButton(
-          onPressed: () {},
+          onPressed: () async {
+            SharedPreferences sharedPreferences =
+                await SharedPreferences.getInstance();
+            sharedPreferences.remove('uid');
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()));
+          },
           icon: const Icon(
-            Icons.face,
-            color: Colors.black,
+            Icons.logout,
             size: 28,
+            color: Colors.black,
           ),
         ),
+        // Provider.of<Authentication>(context, listen: true).getuid == null
+        //     ? IconButton(
+        //         onPressed: () {},
+        //         icon: const Icon(
+        //           Icons.face,
+        //           size: 28,
+        //           color: Colors.black,
+        //         ),
+        //       )
+        //     : IconButton(
+        //         onPressed: () async {
+        //           SharedPreferences sharedPreferences =
+        //               await SharedPreferences.getInstance();
+        //           sharedPreferences.remove('uid');
+        //           Navigator.pushReplacement(
+        //               context,
+        //               MaterialPageRoute(
+        //                   builder: (context) => const HomeScreen()));
+        //         },
+        //         icon: const Icon(
+        //           Icons.logout,
+        //           size: 28,
+        //           color: Colors.black,
+        //         ),
+        //       ),
         Row(
           children: <Widget>[
             IconButton(
@@ -27,7 +71,6 @@ class Headers extends ChangeNotifier {
                 size: 21,
               ),
             ),
-           
             Text(
               (Provider.of<GetLocation>(context, listen: true).finalAddress),
               style: const TextStyle(

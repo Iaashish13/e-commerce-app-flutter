@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pizmo/Helper/constants.dart';
-import 'package:pizmo/Screens/login_screen.dart';
+import 'package:pizmo/Screens/details_screen.dart';
+
 import 'package:pizmo/Screens/map_screen.dart';
+import 'package:pizmo/Services/authentication.dart';
+
+import 'package:pizmo/Services/data.dart';
 import 'package:pizmo/Services/get_location.dart';
 import 'package:provider/provider.dart';
-
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -53,7 +56,7 @@ class _CartScreenState extends State<CartScreen> {
         const Spacer(),
         IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            // Provider.of<ManagingData>(context, listen: false).forOrder(context);
           },
           icon: const Icon(
             Icons.delete,
@@ -89,30 +92,112 @@ class _CartScreenState extends State<CartScreen> {
   Widget cartData(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height / 2.2,
-      child: StreamBuilder<QuerySnapshot?>(
-        stream: FirebaseFirestore.instance.collection('myOrders').snapshots(),
+      child: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('myOrders')
+            .doc(userUid)
+            .collection('orders')
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           } else {
-            return ListView(
-              children: snapshot.data.docs
-                  .map<Widget>((DocumentSnapshot documentSnapshot) {
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapshot.data.docs.length,
+              itemBuilder: (BuildContext context, index) {
                 return Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16)),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
+                    vertical: 8,
                   ),
                   child: Row(
                     children: [
-                      CircleAvatar(
+                      SizedBox(
                         child: Image.network(
-                          documentSnapshot['image'],
+                          snapshot.data.docs[index]['image'],
+                          height: 100,
+                          width: 100,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            snapshot.data.docs[index]['name'],
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 20.0,
+                            ),
+                          ),
+                          Text(
+                            'Rs  ${snapshot.data.docs[index]['price'].toString()}',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'Onion:    ${snapshot.data.docs[index]['onion'].toString()}',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 18.0,
+                            ),
+                          ),
+                          Text(
+                            'Beacon:  ${snapshot.data.docs[index]['beacon'].toString()}',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 18.0,
+                            ),
+                          ),
+                          Text(
+                            'Cheese:  ${snapshot.data.docs[index]['cheese'].toString()}',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 18.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      CircleAvatar(
+                        backgroundColor: kActiveColor,
+                        child: Text(
+                          snapshot.data.docs[index]['size'],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Provider.of<ManagingData>(context, listen: false)
+                              .deleteData(context,
+                                  '${snapshot.data.docs[index]['name']}');
+                          //  Provider.of<ManagingData>(context,listen: false).forOrder(context);
+                        },
+                        icon: const Icon(
+                          Icons.delete,
                         ),
                       ),
                     ],
                   ),
                 );
-              }).toList(),
+              },
             );
           }
         },
@@ -288,8 +373,7 @@ class _CartScreenState extends State<CartScreen> {
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()));
+              print(userUid);
             },
             child: Container(
               width: MediaQuery.of(context).size.width / 2,

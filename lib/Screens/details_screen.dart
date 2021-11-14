@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pizmo/Helper/constants.dart';
 import 'package:pizmo/Providers/calculations.dart';
 import 'package:pizmo/Screens/cart_screen.dart';
-import 'package:pizmo/Screens/home_screen.dart';
 import 'package:pizmo/Screens/login_screen.dart';
-import 'package:pizmo/Services/authentication.dart';
+import 'package:pizmo/Services/data.dart';
+
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -406,15 +405,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
-            onTap: () {
+            onTap: () async {
               if (userUid == null) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const LoginScreen()));
               } else {
-                  addedToCart(context);
-                context.read<Calculations>().addtoCart(context, {
+                await context.read<Calculations>().addtoCart(
+                      context,{
                   'image': widget.queryDocumentSnapshot['image'],
                   'name': widget.queryDocumentSnapshot['Name'],
                   'price': widget.queryDocumentSnapshot['price'],
@@ -422,7 +421,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   'beacon': context.read<Calculations>().getbeaconValue,
                   'cheese': context.read<Calculations>().getCheeseValue,
                   'size': context.read<Calculations>().getSize,
-                });
+                  'id': widget.queryDocumentSnapshot.id,
+                },'${widget.queryDocumentSnapshot['Name']}'
+                    );
               
               }
 
@@ -473,11 +474,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
           children: <Widget>[
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        type: PageTransitionType.leftToRight,
-                        child: const CartScreen()));
+                if (userUid == null) {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: const LoginScreen(),
+                          type: PageTransitionType.leftToRight));
+                } else {
+                  Navigator.pushReplacement(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.leftToRight,
+                          child: const CartScreen()));
+                }
               },
               child: Container(
                 padding: const EdgeInsets.all(8.0),
