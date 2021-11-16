@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esewa_pnp/esewa.dart';
+
+import 'package:esewa_pnp/esewa_pnp.dart';
 import 'package:flutter/material.dart';
 import 'package:pizmo/Helper/constants.dart';
 import 'package:pizmo/Screens/details_screen.dart';
 
 import 'package:pizmo/Screens/map_screen.dart';
-import 'package:pizmo/Services/authentication.dart';
 
 import 'package:pizmo/Services/data.dart';
 import 'package:pizmo/Services/get_location.dart';
@@ -18,6 +20,18 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  ESewaPnp? _eSewaPnp;
+  ESewaConfiguration? _configuration;
+  @override
+  void initState() {
+    _configuration = ESewaConfiguration(
+        clientID: "JB0BBQ4aD0UqIThFJwAKBgAXEUkEGQUBBAwdOgABHD4DChwUAB0R",
+        secretKey: "BhwIWQQADhIYSxILExMcAgFXFhcOBwAKBgAXEQ==",
+        environment: ESewaConfiguration.ENVIRONMENT_TEST);
+    _eSewaPnp = ESewaPnp(configuration: _configuration!);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -373,7 +387,49 @@ class _CartScreenState extends State<CartScreen> {
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
             onTap: () {
-              print(userUid);
+              showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16)),
+                      height: MediaQuery.of(context).size.height / 6,
+                      child: Column(
+                        children: <Widget>[
+                          TextButton(
+                            child: const Text(
+                              'Cash on Delivery',
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 20),
+                            ),
+                            onPressed: () {},
+                          ),
+                          ESewaPaymentButton(_eSewaPnp!,
+                              amount: 10,
+                              productId: '1233',
+                              productName: 'Chicken Pizza',
+                              callBackURL: 'https:/www.google.com',
+                              onSuccess: (result) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                buildSnackbar(
+                                    const Color.fromRGBO(65, 161, 36, 1),
+                                    result.message!));
+                          }, onFailure: (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                buildSnackbar(Colors.red, e.message!));
+                          }),
+                          // TextButton(
+                          //   child: const Text(
+                          //     'Pay with esewa',
+                          //     style:
+                          //         TextStyle(color: Colors.black, fontSize: 20),
+                          //   ),
+                          //   onPressed: () {},
+                          // ),
+                        ],
+                      ),
+                    );
+                  });
             },
             child: Container(
               width: MediaQuery.of(context).size.width / 2,
@@ -397,6 +453,16 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  buildSnackbar(
+    Color color,
+    String msg,
+  ) {
+    return SnackBar(
+      content: Text(msg),
+      backgroundColor: color,
     );
   }
 }

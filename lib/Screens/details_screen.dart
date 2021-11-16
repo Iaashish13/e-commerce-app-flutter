@@ -5,7 +5,6 @@ import 'package:pizmo/Helper/constants.dart';
 import 'package:pizmo/Providers/calculations.dart';
 import 'package:pizmo/Screens/cart_screen.dart';
 import 'package:pizmo/Screens/login_screen.dart';
-import 'package:pizmo/Services/data.dart';
 
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -413,18 +412,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         builder: (context) => const LoginScreen()));
               } else {
                 await context.read<Calculations>().addtoCart(
-                      context,{
-                  'image': widget.queryDocumentSnapshot['image'],
-                  'name': widget.queryDocumentSnapshot['Name'],
-                  'price': widget.queryDocumentSnapshot['price'],
-                  'onion': context.read<Calculations>().getonionsValue,
-                  'beacon': context.read<Calculations>().getbeaconValue,
-                  'cheese': context.read<Calculations>().getCheeseValue,
-                  'size': context.read<Calculations>().getSize,
-                  'id': widget.queryDocumentSnapshot.id,
-                },'${widget.queryDocumentSnapshot['Name']}'
-                    );
-              
+                    context,
+                    {
+                      'image': widget.queryDocumentSnapshot['image'],
+                      'name': widget.queryDocumentSnapshot['Name'],
+                      'price': widget.queryDocumentSnapshot['price'],
+                      'onion': context.read<Calculations>().getonionsValue,
+                      'beacon': context.read<Calculations>().getbeaconValue,
+                      'cheese': context.read<Calculations>().getCheeseValue,
+                      'size': context.read<Calculations>().getSize,
+                      'id': widget.queryDocumentSnapshot.id,
+                    },
+                    '${widget.queryDocumentSnapshot['Name']}');
               }
 
               // getUid().whenComplete(() {
