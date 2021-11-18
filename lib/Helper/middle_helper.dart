@@ -11,24 +11,25 @@ class MiddleHelper extends ChangeNotifier {
       padding: const EdgeInsets.only(top: 24.0, left: 16.0),
       child: RichText(
         text: const TextSpan(
-            text: 'Favourite ',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 28,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'Yaldevi',
-            ),
-            children: <TextSpan>[
-              TextSpan(
-                text: 'dishes',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Yaldevi',
-                ),
+          text: 'Favourite ',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 28,
+            fontWeight: FontWeight.w500,
+            fontFamily: 'Yaldevi',
+          ),
+          children: <TextSpan>[
+            TextSpan(
+              text: 'dishes',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 24,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Yaldevi',
               ),
-            ],),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -208,74 +209,86 @@ class MiddleHelper extends ChangeNotifier {
               itemCount: snapshot.data.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(24.0))),
-                  margin: const EdgeInsets.only(bottom: 12.0),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Row(
-                      children: <Widget>[
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              snapshot.data[index].data()['Name'],
-                              style: const TextStyle(
-                                  fontSize: 19, fontWeight: FontWeight.w500),
-                            ),
-                            const SizedBox(
-                              height: 16.0,
-                            ),
-                            Text(
-                              snapshot.data[index].data()['category'],
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.grey),
-                            ),
-                            const SizedBox(
-                              height: 4.0,
-                            ),
-                            Row(
-                              children: [
-                                const Text(
-                                  'Rs',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                const SizedBox(
-                                  width: 4.0,
-                                ),
-                                Text(
-                                  snapshot.data[index]
-                                      .data()['price']
-                                      .toString(),
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(24),
-                              topLeft: Radius.circular(24)),
-                          child: Image.network(
-                            snapshot.data[index].data()['image'],
-                            height: 120,
-                            width: 160,
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        type: PageTransitionType.leftToRight,
+                        child: DetailsScreen(
+                            queryDocumentSnapshot: snapshot.data[index]),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(24.0))),
+                    margin: const EdgeInsets.only(bottom: 12.0),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Row(
+                        children: <Widget>[
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                snapshot.data[index].data()['Name'],
+                                style: const TextStyle(
+                                    fontSize: 19, fontWeight: FontWeight.w500),
+                              ),
+                              const SizedBox(
+                                height: 16.0,
+                              ),
+                              Text(
+                                snapshot.data[index].data()['category'],
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey),
+                              ),
+                              const SizedBox(
+                                height: 4.0,
+                              ),
+                              Row(
+                                children: [
+                                  const Text(
+                                    'Rs',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  const SizedBox(
+                                    width: 4.0,
+                                  ),
+                                  Text(
+                                    snapshot.data[index]
+                                        .data()['price']
+                                        .toString(),
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
+                          const Spacer(),
+                          ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(24),
+                                topLeft: Radius.circular(24)),
+                            child: Image.network(
+                              snapshot.data[index].data()['image'],
+                              height: 120,
+                              width: 160,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -304,7 +317,7 @@ class MiddleHelper extends ChangeNotifier {
                   color: Colors.grey,
                   fontSize: 24,
                   fontWeight: FontWeight.w300,
-                   fontFamily: 'Yaldevi',
+                  fontFamily: 'Yaldevi',
                 ),
               ),
             ]),

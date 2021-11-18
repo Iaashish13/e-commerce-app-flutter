@@ -403,29 +403,26 @@ class _CartScreenState extends State<CartScreen> {
                                   TextStyle(color: Colors.black, fontSize: 20),
                             ),
                             onPressed: () {},
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.lightGreen,
+                            ),
                           ),
                           ESewaPaymentButton(_eSewaPnp!,
-                              amount: 10,
+                              amount: 300,
                               productId: '1233',
                               productName: 'Chicken Pizza',
                               callBackURL: 'https:/www.google.com',
                               onSuccess: (result) {
+                            Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                                 buildSnackbar(
                                     const Color.fromRGBO(65, 161, 36, 1),
                                     result.message!));
                           }, onFailure: (e) {
+                            Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                                 buildSnackbar(Colors.red, e.message!));
                           }),
-                          // TextButton(
-                          //   child: const Text(
-                          //     'Pay with esewa',
-                          //     style:
-                          //         TextStyle(color: Colors.black, fontSize: 20),
-                          //   ),
-                          //   onPressed: () {},
-                          // ),
                         ],
                       ),
                     );
