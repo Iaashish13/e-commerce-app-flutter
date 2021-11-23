@@ -18,8 +18,8 @@ class Calculations with ChangeNotifier {
       mediumSelected = false,
       largeSelected = false,
       selected = false;
-  String size ='';
- String get getSize =>size;
+  String size = '';
+  String get getSize => size;
   int get getCheeseValue => cheeseValue;
   int get getbeaconValue => beaconValue;
   int get getonionsValue => onionsValue;
@@ -101,7 +101,7 @@ class Calculations with ChangeNotifier {
     mediumSelected = true;
     smallSelected = false;
     largeSelected = false;
-    size  = 'M';
+    size = 'M';
     notifyListeners();
   }
 
@@ -112,31 +112,31 @@ class Calculations with ChangeNotifier {
     size = 'L';
     notifyListeners();
   }
-  resetData(){
+
+  resetData() {
     cheeseValue = 0;
-      beaconValue = 0;
-      onionsValue = 0;
-      noOfPlates = 0;
-      noOfSpecialChutney = 0;
-      noOfPiroChutney = 0;
-      cartData = 0;
-      largeSelected = false;
+    beaconValue = 0;
+    onionsValue = 0;
+    noOfPlates = 0;
+    noOfSpecialChutney = 0;
+    noOfPiroChutney = 0;
+    cartData = 0;
+    largeSelected = false;
     smallSelected = false;
     mediumSelected = false;
-      
-      notifyListeners();
 
+    notifyListeners();
   }
 
-  addtoCart(BuildContext context, dynamic data,String name) async {
+  addtoCartPizza(BuildContext context, dynamic data, String name) async {
     if (smallSelected != false ||
         mediumSelected != false ||
         largeSelected != false) {
       cartData++;
-     
+
       await Provider.of<ManagingData>(context, listen: false)
-          .submitData(context, data,name);
-          notifyListeners();
+          .submitData(context, data, name);
+      notifyListeners();
     } else {
       return showModalBottomSheet(
           context: context,
@@ -151,5 +151,13 @@ class Calculations with ChangeNotifier {
             );
           });
     }
+  }
+
+  addtoCartOthers(BuildContext context, dynamic data, String name) async {
+    cartData++;
+
+    await Provider.of<ManagingData>(context, listen: false)
+        .submitData(context, data, name);
+    notifyListeners();
   }
 }

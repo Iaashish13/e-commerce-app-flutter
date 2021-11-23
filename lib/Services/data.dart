@@ -12,21 +12,17 @@ class ManagingData with ChangeNotifier {
     return querySnapshot.docs;
   }
 
-  Future submitData(BuildContext context, dynamic data,String name) async {
-   
+  Future submitData(BuildContext context, dynamic data, String name) async {
     return await firebaseFirestore
         .collection('myOrders')
         .doc(userUid)
         .collection('orders')
         .doc(name)
-      
         .set(data);
-        
   }
 
-  Future deleteData(BuildContext context,String name) async {
-  
-  await firebaseFirestore
+  Future deleteData(BuildContext context, String name) async {
+    await firebaseFirestore
         .collection('myOrders')
         .doc(userUid)
         .collection('orders')
@@ -40,11 +36,5 @@ class ManagingData with ChangeNotifier {
     // });
   }
 
-  // Future forOrder(BuildContext context) async {
-  //   await firebaseFirestore
-  //       .collection('myOrders')
-  //       .doc('$userUid')
-  //       .delete();
-  //       notifyListeners();
-  // }
+ 
 }

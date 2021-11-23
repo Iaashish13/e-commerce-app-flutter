@@ -45,6 +45,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
             appBar(context),
             selectedImage(context),
             itemDetails(context),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 25,
+            ),
             footerDetails(context),
           ],
         ),
@@ -82,7 +85,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Widget selectedImage(BuildContext context) {
     return SizedBox(
-      height: 280,
+      height: MediaQuery.of(context).size.height / 3.5,
       child: Container(
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
@@ -174,6 +177,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       return Padding(
         padding: const EdgeInsets.only(top: 32.0, left: 8, right: 8),
         child: Container(
+          alignment: Alignment.center,
           decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(
                 Radius.circular(24.0),
@@ -235,6 +239,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       );
     } else {
       return Container(
+        alignment: Alignment.center,
         padding: const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0),
         // height: 300,
         child: Stack(
@@ -411,42 +416,39 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     MaterialPageRoute(
                         builder: (context) => const LoginScreen()));
               } else {
-                await context.read<Calculations>().addtoCart(
-                    context,
-                    {
-                      'image': widget.queryDocumentSnapshot['image'],
-                      'name': widget.queryDocumentSnapshot['Name'],
-                      'price': widget.queryDocumentSnapshot['price'],
-                      'onion': context.read<Calculations>().getonionsValue,
-                      'beacon': context.read<Calculations>().getbeaconValue,
-                      'cheese': context.read<Calculations>().getCheeseValue,
-                      'size': context.read<Calculations>().getSize,
-                      'id': widget.queryDocumentSnapshot.id,
-                    },
-                    '${widget.queryDocumentSnapshot['Name']}');
+                widget.queryDocumentSnapshot['category'] == 'Pizza'
+                    ?
+                     await context.read<Calculations>().addtoCartPizza(
+                        context,
+                        {
+                          'image': widget.queryDocumentSnapshot['image'],
+                          'name': widget.queryDocumentSnapshot['Name'],
+                          'price': widget.queryDocumentSnapshot['price'],
+                          'onion': context.read<Calculations>().getonionsValue,
+                          'beacon': context.read<Calculations>().getbeaconValue,
+                          'cheese': context.read<Calculations>().getCheeseValue,
+                          'size': context.read<Calculations>().getSize,
+                          'id': widget.queryDocumentSnapshot.id,
+                          'category': widget.queryDocumentSnapshot['category'],
+                        },
+                        '${widget.queryDocumentSnapshot['Name']}')
+                    : await context.read<Calculations>().addtoCartOthers(
+                        context,
+                        {
+                          'image': widget.queryDocumentSnapshot['image'],
+                          'name': widget.queryDocumentSnapshot['Name'],
+                          'price': widget.queryDocumentSnapshot['price'],
+                          'category': widget.queryDocumentSnapshot['category'],
+                          'piroChutney':
+                              context.read<Calculations>().getNoOfPiroChutney,
+                          'plates':
+                              context.read<Calculations>().getNoOfPlates,
+                          'specialChutney': context
+                              .read<Calculations>()
+                              .getNoOfSpecialChutney,
+                        },
+                        '${widget.queryDocumentSnapshot['Name']}');
               }
-
-              // getUid().whenComplete(() {
-              //   Navigator.pushReplacement(
-              //       context,
-              //       MaterialPageRoute(
-              //           builder: (context) => userUid == null
-              //               ? const LoginScreen()
-              //               : const HomeScreen()));
-              // });
-              // context.read<Authentication>().authState;
-              // final firebaseUser = context.read<User?>();
-              // if (firebaseUser != null) {
-              //   Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //           builder: (context) => const CartScreen()));
-              // } else {
-              //   Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //           builder: (context) => const LoginScreen()));
-              // }
             },
             child: Container(
               width: MediaQuery.of(context).size.width / 2,

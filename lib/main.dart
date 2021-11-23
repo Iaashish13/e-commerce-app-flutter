@@ -10,7 +10,7 @@ import 'package:pizmo/Services/data.dart';
 import 'package:pizmo/Services/get_location.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
+void main() async { 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(

@@ -1,13 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esewa_pnp/esewa.dart';
-
 import 'package:esewa_pnp/esewa_pnp.dart';
 import 'package:flutter/material.dart';
 import 'package:pizmo/Helper/constants.dart';
 import 'package:pizmo/Screens/details_screen.dart';
-
 import 'package:pizmo/Screens/map_screen.dart';
-
 import 'package:pizmo/Services/data.dart';
 import 'package:pizmo/Services/get_location.dart';
 import 'package:provider/provider.dart';
@@ -68,14 +65,14 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ),
         const Spacer(),
-        IconButton(
-          onPressed: () {
-            // Provider.of<ManagingData>(context, listen: false).forOrder(context);
-          },
-          icon: const Icon(
-            Icons.delete,
-          ),
-        ),
+        // IconButton(
+        //   onPressed: () {
+        //     // Provider.of<ManagingData>(context, listen: false).forOrder(context);
+        //   },
+        //   icon: const Icon(
+        //     Icons.delete,
+        //   ),
+        // ),
       ],
     );
   }
@@ -119,7 +116,9 @@ class _CartScreenState extends State<CartScreen> {
             return ListView.builder(
               shrinkWrap: true,
               itemCount: snapshot.data.docs.length,
-              itemBuilder: (BuildContext context, index) {
+              itemBuilder: (BuildContext context, int index) {
+                final String categoryy =
+                    snapshot.data.docs[index]['category'].toString();
                 return Container(
                   margin:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -162,21 +161,27 @@ class _CartScreenState extends State<CartScreen> {
                             ),
                           ),
                           Text(
-                            'Onion:    ${snapshot.data.docs[index]['onion'].toString()}',
+                            categoryy == 'Pizza'
+                                ? 'Onion:    ${snapshot.data.docs[index]['onion'].toString()}'
+                                : 'No of Plates :         ${snapshot.data.docs[index]['plates'].toString()}',
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 18.0,
                             ),
                           ),
                           Text(
-                            'Beacon:  ${snapshot.data.docs[index]['beacon'].toString()}',
+                            categoryy == 'Pizza'
+                                ? 'Beacon:  ${snapshot.data.docs[index]['beacon'].toString()}'
+                                : 'Special Chutney : ${snapshot.data.docs[index]['specialChutney'].toString()}',
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 18.0,
                             ),
                           ),
                           Text(
-                            'Cheese:  ${snapshot.data.docs[index]['cheese'].toString()}',
+                            categoryy == 'Pizza'
+                                ? 'Cheese:  ${snapshot.data.docs[index]['cheese'].toString()}'
+                                : 'Piro Chutney:        ${snapshot.data.docs[index]['piroChutney'].toString()}',
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 18.0,
@@ -187,15 +192,19 @@ class _CartScreenState extends State<CartScreen> {
                       const SizedBox(
                         width: 20,
                       ),
-                      CircleAvatar(
-                        backgroundColor: kActiveColor,
-                        child: Text(
-                          snapshot.data.docs[index]['size'],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18.0,
-                          ),
-                        ),
+                      Container(
+                        child: categoryy == 'Pizza'
+                            ? CircleAvatar(
+                                backgroundColor: kActiveColor,
+                                child: Text(
+                                  snapshot.data.docs[index]['size'],
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18.0,
+                                  ),
+                                ),
+                              )
+                            : Container(),
                       ),
                       IconButton(
                         onPressed: () {
