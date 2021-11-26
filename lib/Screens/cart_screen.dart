@@ -36,18 +36,16 @@ class _CartScreenState extends State<CartScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       backgroundColor: const Color(0xfff5f5f5),
       body: SafeArea(
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              appBar(context),
-              headerText(context),
-              cartData(context),
-              shippingDetails(),
-              billingData(),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            appBar(context),
+            headerText(context),
+            cartData(context),
+            // shippingDetails(),
+            billingData(),
+          ],
         ),
       ),
     );
@@ -113,113 +111,121 @@ class _CartScreenState extends State<CartScreen> {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           } else {
-            return ListView.builder(
+            return ListView.builder(  
               shrinkWrap: true,
               itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int index) {
                 final String categoryy =
                     snapshot.data.docs[index]['category'].toString();
                 return Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16)),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        child: Image.network(
-                          snapshot.data.docs[index]['image'],
-                          height: 100,
-                          width: 100,
+                  child: Container( 
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 10),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16)),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          child: Image.network(
+                            snapshot.data.docs[index]['image'],
+                            height: 100,
+                            width: 100,
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            snapshot.data.docs[index]['name'],
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 20.0,
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              snapshot.data.docs[index]['name'],
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 20.0,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'Rs  ${snapshot.data.docs[index]['price'].toString()}',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
+                            Text(
+                              'Rs  ${snapshot.data.docs[index]['price'].toString()}',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            categoryy == 'Pizza'
-                                ? 'Onion:    ${snapshot.data.docs[index]['onion'].toString()}'
-                                : 'No of Plates :         ${snapshot.data.docs[index]['plates'].toString()}',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 18.0,
+                            Text(
+                              categoryy == 'Pizza'
+                                  ? 'Onion:    ${snapshot.data.docs[index]['onion'].toString()}'
+                                  : 'No of Plates :         ${snapshot.data.docs[index]['plates'].toString()}',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.0,
+                              ),
                             ),
-                          ),
-                          Text(
-                            categoryy == 'Pizza'
-                                ? 'Beacon:  ${snapshot.data.docs[index]['beacon'].toString()}'
-                                : 'Special Chutney : ${snapshot.data.docs[index]['specialChutney'].toString()}',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 18.0,
+                            Text(
+                              categoryy == 'Pizza'
+                                  ? 'Beacon:  ${snapshot.data.docs[index]['beacon'].toString()}'
+                                  : 'Special Chutney : ${snapshot.data.docs[index]['specialChutney'].toString()}',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.0,
+                              ),
                             ),
-                          ),
-                          Text(
-                            categoryy == 'Pizza'
-                                ? 'Cheese:  ${snapshot.data.docs[index]['cheese'].toString()}'
-                                : 'Piro Chutney:        ${snapshot.data.docs[index]['piroChutney'].toString()}',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 18.0,
+                            Text(
+                              categoryy == 'Pizza'
+                                  ? 'Cheese:  ${snapshot.data.docs[index]['cheese'].toString()}'
+                                  : 'Piro Chutney:        ${snapshot.data.docs[index]['piroChutney'].toString()}',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.0,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Container(
-                        child: categoryy == 'Pizza'
-                            ? CircleAvatar(
-                                backgroundColor: kActiveColor,
-                                child: Text(
-                                  snapshot.data.docs[index]['size'],
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18.0,
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Container(
+                          child: categoryy == 'Pizza'
+                              ? CircleAvatar(
+                                  backgroundColor: kActiveColor,
+                                  child: Text(
+                                    snapshot.data.docs[index]['size'],
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                    ),
                                   ),
-                                ),
-                              )
-                            : Container(),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          Provider.of<ManagingData>(context, listen: false)
-                              .deleteData(context,
-                                  '${snapshot.data.docs[index]['name']}');
-                          //  Provider.of<ManagingData>(context,listen: false).forOrder(context);
-                        },
-                        icon: const Icon(
-                          Icons.delete,
+                                )
+                              : Container(),
                         ),
-                      ),
-                    ],
+                        IconButton(
+                          onPressed: () {
+                            Provider.of<ManagingData>(context,
+                                    listen: false)
+                                .deleteData(context,
+                                    '${snapshot.data.docs[index]['name']}');
+                            //  Provider.of<ManagingData>(context,listen: false).forOrder(context);
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+                  
                 );
+                
+               
+                
+                
               },
             );
           }
@@ -238,17 +244,25 @@ class _CartScreenState extends State<CartScreen> {
             borderRadius: BorderRadius.all(Radius.circular(24))),
         child: Column(
           children: <Widget>[
-            shippingData(context, const Icon(Icons.location_on),
-                context.watch<GetLocation>().mainAdress),
             shippingData(
-                context, const Icon(Icons.schedule_outlined), '30-35 mins'),
+              context,
+              const Icon(Icons.location_on),
+              context.watch<GetLocation>().finalAddress,
+              () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const MapScreen()));
+              },
+            ),
+            shippingData(context, const Icon(Icons.schedule_outlined),
+                '30-35 mins', () {}),
           ],
         ),
       ),
     );
   }
 
-  Widget shippingData(BuildContext context, Icon icon, String data) {
+  Widget shippingData(
+      BuildContext context, Icon icon, String data, VoidCallback onPressed) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       decoration: const BoxDecoration(
@@ -265,12 +279,7 @@ class _CartScreenState extends State<CartScreen> {
             style: const TextStyle(color: Colors.black, fontSize: 20),
           ),
           const Spacer(),
-          IconButton(
-              onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const MapScreen()));
-              },
-              icon: const Icon(Icons.edit)),
+          IconButton(onPressed: onPressed, icon: const Icon(Icons.edit)),
         ],
       ),
     );
@@ -411,7 +420,19 @@ class _CartScreenState extends State<CartScreen> {
                               style:
                                   TextStyle(color: Colors.black, fontSize: 20),
                             ),
-                            onPressed: () {},
+                            onPressed: () async {
+                              FirebaseFirestore.instance.collection('myOrders').doc(userUid).collection('orders').snapshots();
+
+                              await FirebaseFirestore.instance
+                                .collection('myOrders')
+                                .doc(userUid)
+                                .update({'status': 'Payment Remaining'})
+                                // ignore: avoid_print
+                                .then((value) => print('Cash on Delivery'))
+                                .catchError(
+                                    // ignore: avoid_print
+                                    (error) => print('Failed to update user'));
+                            },
                             style: TextButton.styleFrom(
                               backgroundColor: Colors.lightGreen,
                             ),
@@ -421,12 +442,22 @@ class _CartScreenState extends State<CartScreen> {
                               productId: '1233',
                               productName: 'Chicken Pizza',
                               callBackURL: 'https:/www.google.com',
-                              onSuccess: (result) {
-                            Navigator.pop(context);
+                              onSuccess: (result) async {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 buildSnackbar(
                                     const Color.fromRGBO(65, 161, 36, 1),
                                     result.message!));
+                            await FirebaseFirestore.instance
+                                .collection('myOrders')
+                                .doc(userUid)
+                                .update({'status': 'Paid'})
+                                // ignore: avoid_print
+                                .then((value) => print('Paid with Esewa'))
+                                .catchError(
+                                    // ignore: avoid_print
+                                    (error) => print('Failed to update user'));
+
+                            Navigator.pop(context);
                           }, onFailure: (e) {
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(

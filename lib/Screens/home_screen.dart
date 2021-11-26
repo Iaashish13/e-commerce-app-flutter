@@ -26,9 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfff5f5f5),
-      floatingActionButton: FAB().floatingActionButton(context),
+      // floatingActionButton: FAB().floatingActionButton(context),
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: SingleChildScrollView( 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

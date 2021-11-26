@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pizmo/Helper/constants.dart';
+import 'package:pizmo/Screens/details_screen.dart';
 import 'package:pizmo/Screens/home_screen.dart';
 import 'package:pizmo/Services/authentication.dart';
 import 'package:pizmo/Services/get_location.dart';
@@ -9,15 +10,15 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Headers extends ChangeNotifier {
-  
   Widget appBar(BuildContext context) {
-    context.read<Authentication>().authState;
-    final firebaseUser = context.read<User?>();
+    // context.read<Authentication>().authState;
+    // final firebaseUser = context.read<User?>();
+    var currentUser =FirebaseAuth.instance.currentUser;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        firebaseUser == null
+        currentUser == null
             ? IconButton(
                 onPressed: () {},
                 icon: const Icon(
@@ -28,13 +29,7 @@ class Headers extends ChangeNotifier {
               )
             : IconButton(
                 onPressed: () async {
-                  SharedPreferences sharedPreferences =
-                      await SharedPreferences.getInstance();
-                  sharedPreferences.remove('uid');
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomeScreen()));
+                  await showAlertDialogB(context);
                 },
                 icon: const Icon(
                   Icons.logout,
@@ -138,5 +133,34 @@ class Headers extends ChangeNotifier {
         ),
       ),
     );
+  }
+
+  showAlertDialogB(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              title: const Text('Sign Out ?'),
+              content: const Text('Do you want to Sign out ?'),
+              actions: [
+                TextButton(
+                  child: const Text('No'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                TextButton(
+                  child: const Text('Yes'),
+                  onPressed: () async {
+                    SharedPreferences sharedPreferences =
+                        await SharedPreferences.getInstance();
+                    sharedPreferences.remove('uid');
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomeScreen()));
+                  },
+                )
+              ],
+            ));
   }
 }

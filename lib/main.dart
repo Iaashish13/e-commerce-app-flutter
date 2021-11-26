@@ -4,6 +4,7 @@ import 'package:pizmo/Helper/fab.dart';
 import 'package:pizmo/Helper/headers.dart';
 import 'package:pizmo/Helper/middle_helper.dart';
 import 'package:pizmo/Providers/calculations.dart';
+import 'package:pizmo/Screens/Admin%20Panel/Views/orders_scren.dart';
 import 'package:pizmo/Screens/splash_screen.dart';
 import 'package:pizmo/Services/authentication.dart';
 import 'package:pizmo/Services/data.dart';
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Yaldevi',
       ),
-      home: const SplashScreen(),
+      home: const OrdersScreen(),
     );
   }
 }

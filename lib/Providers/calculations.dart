@@ -8,7 +8,7 @@ class Calculations with ChangeNotifier {
   int cheeseValue = 0,
       beaconValue = 0,
       onionsValue = 0,
-      noOfPlates = 0,
+      noOfPlates = 1,
       noOfSpecialChutney = 0,
       noOfPiroChutney = 0,
       cartData = 0;

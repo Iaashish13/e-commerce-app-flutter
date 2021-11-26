@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:pizmo/Helper/constants.dart';
-import 'package:pizmo/Screens/Admin%20Panel/Views/login_admin_panel.dart';
+import 'package:pizmo/Screens/Admin%20Panel/Views/orders_scren.dart';
 import 'package:pizmo/Screens/home_screen.dart';
 import 'package:pizmo/Screens/signup_screen.dart';
 import 'package:pizmo/Services/authentication.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class AdminLogin extends StatefulWidget {
+  const AdminLogin({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _AdminLoginState createState() => _AdminLoginState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _AdminLoginState extends State<AdminLogin> {
   final TextEditingController _emailEditingController = TextEditingController();
   final TextEditingController _passwordEditingController =
       TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
+        reverse: true,
         child: GestureDetector(
           onTap: () {
             FocusScope.of(context).requestFocus(FocusNode());
@@ -38,7 +37,8 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32.0),
               child: Column(
-                children: [
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
                   SizedBox(
                     height: 200,
                     width: 400,
@@ -129,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const HomeScreen())));
+                                          const OrdersScreen())));
                         },
                         style: TextButton.styleFrom(
                             primary: Colors.black,
@@ -158,21 +158,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                  Positioned(
-                      bottom: 0,
-                      child: TextButton(
-                        child: const Text(
-                          'Admin Login',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              PageTransition(
-                                  child: const AdminLogin(),
-                                  type: PageTransitionType.leftToRight));
-                        },
-                      )),
                 ],
               ),
             ),

@@ -21,6 +21,10 @@ class ManagingData with ChangeNotifier {
         .set(data);
   }
 
+  Future orderingData(BuildContext context, dynamic data,) async {
+    return await firebaseFirestore.collection('adminCollection').add(data);
+  }
+
   Future deleteData(BuildContext context, String name) async {
     await firebaseFirestore
         .collection('myOrders')
@@ -35,6 +39,4 @@ class ManagingData with ChangeNotifier {
     //   }
     // });
   }
-
- 
 }
